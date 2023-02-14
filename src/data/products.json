@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "title": "Pantalon",
+    "description": "Talla L",
+    "price": 60,
+    "thumbnail": "http://www.tq.com/cam1.jpg",
+    "code": "004",
+    "stock": 25,
+    "category": "Deportiva",
+    "status1": true
+  }
+]
