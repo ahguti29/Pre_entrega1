@@ -30,22 +30,30 @@ router.get('/:id', (req, res) => {
 })
 router.post('/', (req, res) => {
     try{
-        let productA = products.addProducts(req.body.title, req.body.description, req.body.code, req.body.price, req.body.thumbnail, req.body.category, req.body.status, req.body.stock )
-        if(productA){
-            res.json({product})
-        } else{
-            res.send({error : "Producto no agregado"})
-        }
+        products.addProducts(req.body.title, req.body.description, req.body.code, req.body.price, 
+                req.body.thumbnail, req.body.category, req.body.status, req.body.stock)
+        res.status(201).json({ status: "success", message: "Product created!"})
     } catch (error){
         res.status(404).send({ error });
     }
     
 })
-router.put('/', (req, res) => {
-    //TODO
+router.put('/:id', (req, res) => {
+    try{
+        const myProducts = products.updateProduct(parseInt(req.params.id),req.body);
+        res.send(myProducts);
+    } catch (error) {
+        res.send({ error });
+    }
 })
-router.delete('/', (req, res) => {
-    //TODO
+router.delete('/:id', (req, res) => {
+    try{
+        const myProducts = products.deleteProducts(parseInt(req.params.id));
+        res.send(myProducts);
+    } catch (error) {
+        res.send({ error });
+    }
 })
+
 
 module.exports = router

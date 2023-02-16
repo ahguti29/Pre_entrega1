@@ -2,12 +2,23 @@
   {
     "id": 1,
     "title": "Pantalon",
-    "description": "Talla L",
-    "price": 60,
+    "description": "Talla x",
+    "price": 100,
     "thumbnail": "http://www.tq.com/cam1.jpg",
-    "code": "004",
-    "stock": 25,
+    "code": "005",
+    "stock": 20,
     "category": "Deportiva",
-    "status1": true
+    "status": true
+  },
+  {
+    "id": 2,
+    "title": "Pantalon",
+    "description": "Talla M",
+    "price": 70,
+    "thumbnail": "http://www.tq.com/cam1.jpg",
+    "code": "005",
+    "stock": 20,
+    "category": "Deportiva",
+    "status": true
   }
 ]

@@ -1,5 +1,5 @@
 const fs = require('fs');
-let products = [];
+let products = []; 
 class ProductManager {
 	
 	constructor(path) {
@@ -8,6 +8,7 @@ class ProductManager {
 	/* Funcion que permite generar un ID autoincrementable */
 	generadorId = () => {
 		const count = products.length;
+		console.log(count);
 		if (count === 0) {
 			return 1;
 		} else {
@@ -31,9 +32,9 @@ class ProductManager {
 	/* Función que permite agregar productos validando que se ingresen todos los parametros 
 	y que no se encuentre un code repetido */
 	addProducts = ( title, description, code, price, thumbnail, category, status, stock) => {
-		let status1 = true; 
-		status1 = status
+	
 		const id = this.generadorId();
+		console.log(id);
 
 		//Validación del ingreso de parametros
         if(!title || !description || !price || !code  || !stock || !category || !status){
@@ -41,17 +42,18 @@ class ProductManager {
             return
         }
 		//validación del ID
-		if(products.find((element) => element.id === id)){
-			console.error(`El producto con id ${id} ya existe`)
-			return;
+	 	let productId = products.find((element) => element.id === id)
+		if(!productId){	
+			return console.error(`El producto con id ${id} ya existe`)
 		}
+		
 		//Validación del code ingresado
 		if (products.find((element) => element.code === code)) {
 			console.error(`El producto con code ${code} ya existe`);
             return;
 		}
 		//Se agrega  el producto al array
-		products.push({id, title, description, price, thumbnail, code, stock, category, status1});
+		products.push({id, title, description, price, thumbnail, code, stock, category, status});
 		fs.writeFileSync(this.path, JSON.stringify(products, null, 2))
 	};
 		/* Funcion que permite obtener todos los productos */
