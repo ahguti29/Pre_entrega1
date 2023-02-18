@@ -7,8 +7,8 @@ class ProductManager {
 	}
 	/* Funcion que permite generar un ID autoincrementable */
 	generadorId = () => {
+		const products = JSON.parse(fs.readFileSync(this.path,'utf-8'))
 		const count = products.length;
-		console.log(count);
 		if (count === 0) {
 			return 1;
 		} else {
@@ -32,10 +32,9 @@ class ProductManager {
 	/* Función que permite agregar productos validando que se ingresen todos los parametros 
 	y que no se encuentre un code repetido */
 	addProducts = ( title, description, code, price, thumbnail, category, status, stock) => {
-	
+		const products = JSON.parse(fs.readFileSync(this.path,'utf-8'))
 		const id = this.generadorId();
-		console.log(id);
-
+		
 		//Validación del ingreso de parametros
         if(!title || !description || !price || !code  || !stock || !category || !status){
             console.error ("El producto no fue agregado, completar todos los datos")
@@ -43,10 +42,9 @@ class ProductManager {
         }
 		//validación del ID
 	 	let productId = products.find((element) => element.id === id)
-		if(!productId){	
+		if(productId){	
 			return console.error(`El producto con id ${id} ya existe`)
-		}
-		
+		} 
 		//Validación del code ingresado
 		if (products.find((element) => element.code === code)) {
 			console.error(`El producto con code ${code} ya existe`);
