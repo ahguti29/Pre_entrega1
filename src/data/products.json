@@ -1,34 +1,34 @@
 [
   {
-    "id": 2,
-    "title": "Camisa",
-    "description": "Talla s",
-    "price": 60,
+    "id": 1,
+    "title": "Pantalon",
+    "description": "Talla x",
+    "code": "005",
+    "price": 100,
     "thumbnail": "http://www.tq.com/cam1.jpg",
-    "code": "006",
-    "stock": 50,
     "category": "Deportiva",
-    "status": true
+    "status": true,
+    "stock": 20
+  },
+  {
+    "id": 2,
+    "title": "Pantalon",
+    "description": "Talla x",
+    "code": "055",
+    "price": 500,
+    "thumbnail": "http://www.tq.com/cam1.jpg",
+    "category": "Deportiva",
+    "status": true,
+    "stock": 200
   },
   {
     "id": 3,
-    "title": "Pantalon",
-    "description": "Talla x",
-    "price": 40,
-    "thumbnail": "http://www.tq.com/cam1.jpg",
-    "code": "005",
-    "stock": 10,
-    "category": "Deportiva",
-    "status": true
-  },
-  {
-    "id": 4,
     "title": "Camisa",
     "description": "Talla M",
     "price": 35,
     "thumbnail": "http://www.tq.com/cam1.jpg",
-    "code": "001",
-    "stock": 30,
+    "code": "009",
+    "stock": 50,
     "category": "Deportiva",
     "status": true
   }

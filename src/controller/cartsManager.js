@@ -1,42 +1,73 @@
-const fs = require('fs')
-const carts = []
+const fs = require('fs');
+const path = require('path');
+class CartsManager {
+	constructor() {
+		this.path = path.resolve(__dirname, '../data/carts.json');
+	}
 
-class CartsManager{
-    constructor(path){
-        this.path = path;
-    }
+	readFile = () => {
+		return fs.readFileSync(this.path, { encoding: 'utf-8', flag: 'a+' });
+	};
+
 	generadorId = () => {
-		const products = JSON.parse(fs.readFileSync(this.path,'utf-8'))
-		const count = products.length;
-		if (count === 0) {
-			return 1;
+		const jsonFile = this.readFile();
+		if (jsonFile) {
+			const products = JSON.parse(jsonFile);
+			const count = products.length;
+			if (count !== 0) {
+				return products[count - 1].id + 1;
+			}
+		}
+		return 1;
+	};
+
+	getCartById = (id) => {
+		const fileJson = this.readFile();
+		const carts = JSON.parse(fileJson);
+		if (carts) {
+			return carts.find((identify) => identify.id === id);
 		} else {
-			return products[count - 1].id + 1;
+			const error = 'Not Found';
+			return error;
 		}
 	};
 
-    getCartById = (id) => {
-		const cart = fs.readFileSync(this.path,'utf-8')
-		const carts = JSON.parse(cart)
-		if (carts){
-		return carts.find((identify) => identify.id === id)}
-		else{
-			const error ="Not Found";
-			return error;
-		}	
-	}
-
 	addCart = () => {
-		const carts = JSON.parse(fs.readFileSync(this.path,'utf-8'))
-		let newCart = {id: this.generadorId(), products: []}
-		carts.push(newCart)
-		fs.writeFileSync(this.path, JSON.stringify(carts))
-		return carts
-	}
-	
+		let carts = [];
+		const jsonFile = this.readFile();
+		if (jsonFile) {
+			carts = JSON.parse(jsonFile);
+		}
+		let newCart = { id: this.generadorId(), products: [] };
+		carts.push(newCart);
+		fs.writeFileSync(this.path, JSON.stringify(carts));
+		return carts;
+	};
+
+	addProductToCart = (cartId, productId, quantity) => {
+		let carts = [];
+		const jsonFile = this.readFile();
+		if (jsonFile) {
+			carts = JSON.parse(jsonFile);
+		}
 		
+		const cartIndex = carts.findIndex((c) => c.id == cartId);
+		const productToUpdate = carts[cartIndex].products.findIndex(
+			(p) => p.id == productId
+		);
 
+		if (productToUpdate !== -1) {
+			carts[cartIndex].products[productToUpdate].quantity += quantity;
+		} else {
+			const product = {
+				id: productId,
+				quantity,
+			};
+			carts[cartIndex].products.push(product);
+		}
 
+		fs.writeFileSync(this.path, JSON.stringify(carts, null, 2));
+	};
 }
 
 module.exports = CartsManager;

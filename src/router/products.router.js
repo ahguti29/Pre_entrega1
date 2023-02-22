@@ -1,8 +1,6 @@
 const {Router} = require ('express');
-const path = require('path')
 const ProductManager = require('../controller/productManager');
-const product = path.join(__dirname, '../data/products.json');
-const products = new ProductManager(product)
+const products = new ProductManager()
 const router = Router();
 
 router.get('/', (req, res) => {
