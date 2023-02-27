@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #2e2e2e;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style-type: none;
+    text-decoration: none; }
+  
+  .headerpag {
+    color: white;
+    background-color: #353535;
+    z-index: 2; 
+  }
+  
+  .style-card{
+    width: 20rem;
+  }
+  
+  .card-pers{
+    width: 280px;
+    height: 320px;
+  }
+  
+  .card-title{
+    align-items: center;
+    text-align: center;
+  }
+  
+  .wish-icon {
+      position: absolute;
+      right: 25px;
+      top: 15px;
+      z-index: 99;
+      cursor: pointer;
+      font-size: 20px;
+      color: #abb0b8;
+  }

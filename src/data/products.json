@@ -31,5 +31,16 @@
     "stock": 50,
     "category": "Deportiva",
     "status": true
+  },
+  {
+    "id": 4,
+    "title": "Camiseta",
+    "description": "Talla M",
+    "price": 35,
+    "thumbnail": "http://www.tq.com/cam1.jpg",
+    "code": "008",
+    "stock": 50,
+    "category": "Deportiva",
+    "status": true
   }
 ]

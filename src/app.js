@@ -13,10 +13,12 @@ app.set('views', path.join(__dirname + '/views'))
 app.set('view engine', 'handlebars')
 
 app.get('/', (req, res) => {
-	res.send('Pagina principal');
+	res.render('home', {
+		title : 'E-COMMERCE',
+		name : 'Gloria'
+	});
 });
 
 app.use('/products', productsRouter);
 app.use('/carts' , cartsRouter);
-
 app.listen(8080, () => console.log('Server Up!'));

@@ -3,6 +3,13 @@ const ProductManager = require('../controller/productManager');
 const products = new ProductManager()
 const router = Router();
 
+router.get('/home', (req, res) => {
+        const myProducts = products.getProducts(
+            req.query.limit
+        )
+        res.render('home', {myProducts, title: 'List of products', style : 'style.css'});
+})
+
 router.get('/', (req, res) => {
     try{
         const myProducts = products.getProducts(
