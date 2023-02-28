@@ -7,7 +7,14 @@ router.get('/home', (req, res) => {
         const myProducts = products.getProducts(
             req.query.limit
         )
-        res.render('home', {myProducts, title: 'List of products', style : 'style.css'});
+        res.render('home', {myProducts, title: 'List of products', style :'style.css'});
+})
+
+router.get('/realTimeProducts', (req, res) => {
+    const myProducts = products.getProducts(
+        req.query.limit
+    )
+    res.render('realTimeProducts', {myProducts, title: 'List of products', style :'style.css'});
 })
 
 router.get('/', (req, res) => {

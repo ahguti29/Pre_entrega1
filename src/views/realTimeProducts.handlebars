@@ -1,12 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+<div class="container">
+    <div class="row">
+        <div>
+            <h1 class="text-uppercase headerpag" id="titleList">List of Products</h1>
+        </div>
+        <div class='col-12 m-3 pt-3 pb-3 text-center'>
+            <div class='card style-card item-center' id="contentList"> 
+                {{#each myProducts}}
+                    <div class='card-body'>
+                        <div class='card'>
+                            {{#if this.thumbnail}}
+                                <img src="{{this.thumbnail.[0]}}" class='card-img-top card-pers'alt=''/>
+                            {{else}}
+                                <img src="../public/images/notImage.jpg" class='card-img-top' alt="">
+                            {{/if}}		
+                            <ul class='list-group'>
+                                <li class='list-group-item'><h3><span
+                                        >{{this.id}} </span>{{this.title}}</h3></li>
+                                <li class='list-group-item'><span
+                                    >Description:</span> {{this.description}}</li>
+                                <li class='list-group-item'><span
+                                    >Category:</span> {{this.category}}</li>
+                                <li class='list-group-item'><span
+                                    >Price:</span> {{this.price}}</li>
+                                <li class='list-group-item'><span
+                                    >Stock:</span> {{this.stock}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/client.js"></script>
+
