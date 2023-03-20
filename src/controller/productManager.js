@@ -1,9 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+/* const fs = require('fs');
+const path = require('path'); */
+import fs from 'fs';
+import path from 'path';
 class ProductManager {
 	
 	constructor() {
-		this.path = path.resolve(__dirname, "../data/products.json");
+		this.path = path.resolve("../data/products.json");
 	}
 
 	readFile = () => {
@@ -92,4 +94,5 @@ class ProductManager {
 		
 	} 
 
-	module.exports = ProductManager;
+	/* module.exports = ProductManager; */
+	export default ProductManager;

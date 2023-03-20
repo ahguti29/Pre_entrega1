@@ -1,24 +1,16 @@
-const {Router} = require ('express');
-const path = require('path')
-const cart = path.join(__dirname, '../data/carts.json');
-const CartsManager = require('../controller/cartsManager')
+/* const {Router} = require ('express'); */
+import { Router } from 'express';
+import path from 'path';
+import CartsManager from '../controller/cartsManager.js'
+/* const path = require('path') */
+const cart = path.join('../data/carts.json');
+/* const CartsManager = require('../controller/cartsManager') */
 const carts = new CartsManager(cart)
 const router = Router();
 
 
 router.post('/', (req, res) => {
   
-    /* try{
-      let myCart = carts.addCart()
-     
-      if(myCart){
-       res.status(200).json({ status: "success", message: "Product created!"})
-      }
-      console.log(myCart);
-    }
-     catch (error){
-     return res.status(404).send({error})
-    } */
     let myCart = carts.addCart()
     console.log(myCart);
     res.status(200).json({ status: "success", message: "Product created!"})
@@ -49,5 +41,5 @@ router.post('/:cid([0-9]+)/products/:id([0-9]+)', (req, res) => {
     })
 })
 
-
-module.exports = router
+export default router;
+/* module.exports = router */

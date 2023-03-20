@@ -1,8 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+/* const fs = require('fs');
+const path = require('path'); */
+import fs from 'fs';
+import path from 'path';
 class CartsManager {
 	constructor() {
-		this.path = path.resolve(__dirname, '../data/carts.json');
+		this.path = path.resolve('../data/carts.json');
 	}
 
 	readFile = () => {
@@ -70,4 +72,6 @@ class CartsManager {
 	};
 }
 
-module.exports = CartsManager;
+export default CartsManager;
+/* module.exports = CartsManager;
+ */

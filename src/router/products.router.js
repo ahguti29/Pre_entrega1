@@ -1,5 +1,7 @@
-const {Router} = require ('express');
-const ProductManager = require('../controller/productManager');
+/* const {Router} = require ('express'); */
+import { Router } from 'express';
+import ProductManager from '../controller/productManager.js';
+/* const ProductManager = require('../controller/productManager'); */
 const products = new ProductManager()
 const router = Router();
 
@@ -61,4 +63,5 @@ router.delete('/:id', (req, res) => {
 })
 
 
-module.exports = router
+/* module.exports = router */
+export default router;
