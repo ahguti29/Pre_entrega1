@@ -26,18 +26,32 @@ router.get('/home', (req, res) => {
 }) */
 
 router.get('/', async(req, res) =>{
-    let limit = req.query.limit
-    let page = parseInt(req.query.page)
-    if(!page) page=1
+    const limit = req.query?.limit || 10
+    const page = req.query?.page || 1
+    const filter = req.query?.filter || ''
     
-    let result = await productsModel.paginate({},{page,limit, lean: true})
+    const search = {}
+    if(filter){
+        search.title = filter
+    }
+    const options = {limit, page, lean: true}
+    const result = await productsModel.paginate(search, options)
     result.prevLink = result.hasPrevPage ? `/products?limit=${result.limit}&?page=${result.prevPage}` : ''
     result.nextLink = result.hasNextPage ? `/products?limit=${result.limit}&?page=${result.nextPage}` : ''
-    
-    
     res.render('home', result)
 })
-router.get('/:id', (req, res) => {
+
+router.get('/:id', async (req,res) => {
+try{
+    const id = req.params.id
+    const product = await productsModel.findOne({_id: id})
+    console.log(product)
+    res.render('home', product) 
+} catch (error){
+        res.status(404).send({error})
+}
+});
+/* router.get('/:id', (req, res) => {
     try {
         let product = products.getProductsById(parseInt(req.params.id));
        
@@ -49,7 +63,7 @@ router.get('/:id', (req, res) => {
       } catch (error) {
         res.status(404).send({ error });
       }
-})
+}) */
 router.post('/', (req, res) => {
     try{
         products.addProducts(req.body.title, req.body.description, req.body.code, req.body.price, 
