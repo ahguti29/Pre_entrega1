@@ -8,7 +8,7 @@
 	<body>
 		<div class='col-11 m-3 pt-3 pb-3 text-center flex'>
 			<div class='card style-card item-center'>
-				{{#each myProducts}}
+				{{#each docs}}
 					<div class='card-body'>
 						<div class='card h-100'>
 							{{#if this.thumbnail}}
@@ -33,6 +33,14 @@
 					</div>
 				{{/each}}
 			</div>
+			 <div>
+        		{{#if hasPrevPage }}
+            		<a href="{{prevLink}}">Anterior</a>
+				{{/if}}
+				{{#if hasNextPage}}
+					<a href="{{nextLink}}">Siguiente</a>
+				{{/if}}
+    		</div>
 		</div>
 	</body>
 </html>

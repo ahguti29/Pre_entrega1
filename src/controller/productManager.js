@@ -2,10 +2,11 @@
 const path = require('path'); */
 import fs from 'fs';
 import path from 'path';
+import __dirname from '../utils.js'
 class ProductManager {
 	
 	constructor() {
-		this.path = path.resolve("../data/products.json");
+		this.path = path.resolve(__dirname, "../data/products.json");
 	}
 
 	readFile = () => {

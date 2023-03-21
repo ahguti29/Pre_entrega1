@@ -2,9 +2,10 @@
 const path = require('path'); */
 import fs from 'fs';
 import path from 'path';
+import __dirname from '../utils.js'
 class CartsManager {
 	constructor() {
-		this.path = path.resolve('../data/carts.json');
+		this.path = path.resolve(__dirname, '../data/carts.json');
 	}
 
 	readFile = () => {

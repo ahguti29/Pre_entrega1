@@ -4,6 +4,7 @@ import path from 'path';
 import handlebars from 'express-handlebars';
 import productsRouter from './router/products.router.js'
 import cartsRouter from './router/carts.router.js'
+import __dirname from './utils.js'
 /* const path = require('path'); */
 /* const handlebars = require('express-handlebars'); */
 /* const productsRouter = require('./router/products.router');
@@ -17,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extends: true }));
 app.engine('handlebars', handlebars.engine());
 
-app.set('views', path.join('/views'));
+app.set('views', path.join(__dirname + '/views'));
 app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
@@ -32,7 +33,7 @@ app.use('/carts', cartsRouter);
 app.listen(8080, () => console.log('Server Up!'));
 const main = async () => {
 	await mongoose.connect(uri);
-	let result = await productsModel.insertMany(
+	/* let result = await productsModel.insertMany(
 		[
 			{ id: 1, title: "Polo Azul",
 				description: "Talla M",
@@ -45,7 +46,7 @@ const main = async () => {
 			}
 		]
 	)
-	console.log(result);
+	console.log(result); */
 };
 
 main();

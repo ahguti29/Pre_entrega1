@@ -1,18 +1,20 @@
 /* const {Router} = require ('express'); */
 import { Router } from 'express';
 import ProductManager from '../controller/productManager.js';
+import productsModel from '../models/products.model.js';
 /* const ProductManager = require('../controller/productManager'); */
 const products = new ProductManager()
 const router = Router();
 
 router.get('/home', (req, res) => {
+        
         const myProducts = products.getProducts(
             req.query.limit
         )
         res.render('home', {myProducts, title: 'List of products', style : 'style.css'});
-})
+}) 
 
-router.get('/', (req, res) => {
+/* router.get('/', (req, res) => {
     try{
         const myProducts = products.getProducts(
             req.query.limit
@@ -21,6 +23,19 @@ router.get('/', (req, res) => {
     } catch (error) {
         res.send({ error });
     }
+}) */
+
+router.get('/', async(req, res) =>{
+    let limit = req.query.limit
+    let page = parseInt(req.query.page)
+    if(!page) page=1
+    
+    let result = await productsModel.paginate({},{page,limit, lean: true})
+    result.prevLink = result.hasPrevPage ? `/products?limit=${result.limit}&?page=${result.prevPage}` : ''
+    result.nextLink = result.hasNextPage ? `/products?limit=${result.limit}&?page=${result.nextPage}` : ''
+    
+    
+    res.render('home', result)
 })
 router.get('/:id', (req, res) => {
     try {
