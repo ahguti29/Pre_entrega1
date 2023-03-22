@@ -36,15 +36,17 @@ router.get('/', async(req, res) =>{
     }
     const options = {limit, page, lean: true}
     const result = await productsModel.paginate(search, options)
-    result.prevLink = result.hasPrevPage ? `/products?limit=${result.limit}&?page=${result.prevPage}` : ''
-    result.nextLink = result.hasNextPage ? `/products?limit=${result.limit}&?page=${result.nextPage}` : ''
+    result.prevLink = result.hasPrevPage ? `/products?limit=${result.limit}&page=${result.prevPage}` : ''
+    result.nextLink = result.hasNextPage ? `/products?limit=${result.limit}&page=${result.nextPage}` : ''
+    console.log(result);
     res.render('home', result)
 })
 
-router.get('/:id', async (req,res) => {
+router.get('/:category', async (req,res) => {
 try{
-    const id = req.params.id
-    const product = await productsModel.findOne({_id: id})
+    const category = req.params.category
+    const stock = req.params.stock
+    const product = await productsModel.findOne({category: category})
     console.log(product)
     res.render('home', product) 
 } catch (error){
