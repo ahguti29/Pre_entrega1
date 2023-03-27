@@ -6,12 +6,11 @@ import productsModel from '../models/products.model.js';
 const products = new ProductManager()
 const router = Router();
 
-router.get('/home', (req, res) => {
+router.get('/view', async(req, res) => {
         
-        const myProducts = products.getProducts(
-            req.query.limit
-        )
-        res.render('home', {myProducts, title: 'List of products', style : 'style.css'});
+        const myProducts = await productsModel.find().lean().exec()
+        
+        res.render('realTimeProducts', {docs: myProducts});
 }) 
 
 /* router.get('/', (req, res) => {
@@ -66,7 +65,29 @@ try{
         res.status(404).send({ error });
       }
 }) */
-router.post('/', (req, res) => {
+
+router.post("/", async (req, res) =>{
+    try{
+        const product = req.body
+        if(!product.title || !product.description || !product.price || !product.code  || !product.stock || !product.category || !product.status){
+            return res.status(400).json({
+                message: "Error, debe diligenciar todos los datos"
+            })
+        }
+
+        const newProduct = await productsModel.create(product)
+        res.json({
+            status: "Success",
+            message: "Product Added",
+            newProduct
+        })
+    } catch(error){
+        console.log(error)
+        res.json({error})
+    }
+})
+
+/* router.post('/', (req, res) => {
     try{
         products.addProducts(req.body.title, req.body.description, req.body.code, req.body.price, 
                 req.body.thumbnail, req.body.category, req.body.status, req.body.stock)
@@ -75,23 +96,51 @@ router.post('/', (req, res) => {
         res.status(404).send({ error });
     }
     
+}) */
+
+router.put('/:id', async(req, res) =>{
+    try{
+        const idProduct = req.params.id
+        const updateProduct = req.body
+        const myProduct = await productsModel.updateOne({
+            _id: idProduct}, updateProduct)
+        res.json({
+            status: "Success",
+            message: "Product Update",
+            myProduct
+        })
+    } catch(error){
+        console.log(error);
+        res.json({error})
+    }
 })
-router.put('/:id', (req, res) => {
+
+/* router.put('/:id', (req, res) => {
     try{
         const myProducts = products.updateProduct(parseInt(req.params.id),req.body);
         res.send(myProducts);
     } catch (error) {
         res.send({ error });
     }
-})
-router.delete('/:id', (req, res) => {
+}) */
+
+router.delete('/:id', async(req, res) => {
+    const id = req.params.id;
+    const productDelete = await productsModel.deleteOne({_id: id});
+    res.json({
+        status: "Success",
+        message: "Product Deleted",
+        productDelete
+    })
+}) 
+/* router.delete('/:id', (req, res) => {
     try{
         const myProducts = products.deleteProducts(parseInt(req.params.id));
         res.send(myProducts);
     } catch (error) {
         res.send({ error });
     }
-})
+}) */
 
 
 /* module.exports = router */

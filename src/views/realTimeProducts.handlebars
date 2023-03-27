@@ -1,12 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+<div class='col-11 m-3 pt-3 pb-3 text-center flex'>
+	<div class='card style-card item-center'>
+		{{#each docs}}
+			<div class='card-body'>
+				<div class='card h-100'>
+					{{#if this.thumbnail}}
+					{{!-- <img src="{{this.thumbnail.[0]}}" class='card-img-top card-pers'alt=''/> --}}
+					{{else}}
+					<img src="../public/images/notImage.jpg" class='card-img-top' alt="">
+					{{/if}}
+					
+					<ul class='list-group'>
+						<li class='list-group-item'><h3>{{this.title}}</h3></li>
+						<li class='list-group-item'><span
+							>Description:</span> {{this.description}}</li>
+						<li class='list-group-item'><span
+							>Category:</span> {{this.category}}</li>
+						<li class='list-group-item'><span
+							>Price:</span> {{this.price}}</li>
+						<li class='list-group-item'><span
+							>Stock:</span> {{this.stock}}</li>
+					</ul>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</div>
