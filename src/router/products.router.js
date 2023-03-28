@@ -2,9 +2,14 @@
 import { Router } from 'express';
 import ProductManager from '../controller/productManager.js';
 import productsModel from '../models/products.model.js';
-/* const ProductManager = require('../controller/productManager'); */
+
 const products = new ProductManager()
 const router = Router();
+
+const auth = (req, res, next) => {
+    if(req.session?.user) return next()
+    return res.status(401).send('Auth error')
+}
 
 router.get('/view', async(req, res) => {
         
@@ -24,7 +29,8 @@ router.get('/view', async(req, res) => {
     }
 }) */
 
-router.get('/', async(req, res) =>{
+router.get('/', auth, async(req, res) =>{
+
     const limit = req.query?.limit || 10
     const page = req.query?.page || 1
     const filter = req.query?.filter || ''

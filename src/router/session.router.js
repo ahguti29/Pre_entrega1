@@ -30,12 +30,12 @@ router.post('/login', async (req, res) => {
 
     const user = await UsersModel.findOne({email, password}).lean().exec()
     if(!user) {
-        return res.status(401).render('login', {
+        return res.status(401).render('errorE', {
             error: 'Email o password incorrectos'
         })
     }
     req.session.user = user
-    res.redirect('home')
+    res.redirect('/products')
 })
 
 /* Ruta con metodo get que permite cerrar una sesión */
@@ -43,8 +43,8 @@ router.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if(err) {
             console.log(err);
-            res.status(500).render('/logout', {error: err})
-        } else res.redirect('/login')
+            res.status(500).render('error', {error: err})
+        } else res.redirect('login')
     })
 })
 
