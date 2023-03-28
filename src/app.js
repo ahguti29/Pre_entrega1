@@ -4,16 +4,17 @@ import path from 'path';
 import handlebars from 'express-handlebars';
 import productsRouter from './router/products.router.js'
 import cartsRouter from './router/carts.router.js'
+import sessionRouter from './router/session.router.js'
 import __dirname from './utils.js'
-/* const path = require('path'); */
-/* const handlebars = require('express-handlebars'); */
-/* const productsRouter = require('./router/products.router');
-const cartsRouter = require('./router/carts.router'); */
+import mongoose from 'mongoose';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+import productsModel from './models/products.model.js';
+
 const app = express();
 const uri =
 	'mongodb+srv://ecommerce:entrega2@cluster0.1mmujrd.mongodb.net/ecommerce?retryWrites=true&w=majority';
-import mongoose from 'mongoose';
-import productsModel from './models/products.model.js';
+
 app.use(express.json());
 app.use(express.urlencoded({ extends: true }));
 app.engine('handlebars', handlebars.engine());
@@ -23,30 +24,25 @@ app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
 	res.render('home', {
-		title: 'E-COMMERCE',
-		name: 'Gloria',
+		title: 'E-COMMERCE'
 	});
 });
-
+app.use(session({
+	store: MongoStore.create({
+		mongoUrl: uri,
+		dbName: "ecommerce"
+	}),
+	secret: '3com3rce',
+	resave: true,
+	saveUninitialized: true
+}))
 app.use('/products', productsRouter);
 app.use('/carts', cartsRouter);
+app.use('/session', sessionRouter);
+
 app.listen(8080, () => console.log('Server Up!'));
 const main = async () => {
 	await mongoose.connect(uri);
-	/* let result = await productsModel.insertMany(
-		[
-			{ id: 1, title: "Polo Azul",
-				description: "Talla M",
-				code: 1,
-				price: 25000,
-				thumbnail: "www.polo.com",
-				category: "Polos",
-				status: true,
-				stock: 20
-			}
-		]
-	)
-	console.log(result); */
 };
 
 main();

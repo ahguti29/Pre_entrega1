@@ -28,12 +28,18 @@ router.get('/', async(req, res) =>{
     const limit = req.query?.limit || 10
     const page = req.query?.page || 1
     const filter = req.query?.filter || ''
+    const order = req.query?.sort || ''
+    const sortOrder = req.query?.sortOrder || 'desc'
     
     const search = {}
     if(filter){
         search.title = filter
     }
-    const options = {limit, page, lean: true}
+    const sort = {}
+    if(order){
+        sort[order]= sortOrder
+    }
+    const options = {limit, page, sort, lean: true}
     const result = await productsModel.paginate(search, options)
     result.prevLink = result.hasPrevPage ? `/products?limit=${result.limit}&page=${result.prevPage}` : ''
     result.nextLink = result.hasNextPage ? `/products?limit=${result.limit}&page=${result.nextPage}` : ''
@@ -45,9 +51,9 @@ router.get('/:category', async (req,res) => {
 try{
     const category = req.params.category
     const stock = req.params.stock
-    const product = await productsModel.findOne({category: category})
+    const product = await productsModel.find({category: category}).lean().exec()
     console.log(product)
-    res.render('home', product) 
+    res.render('realTimeProducts', {docs: product}) 
 } catch (error){
         res.status(404).send({error})
 }
