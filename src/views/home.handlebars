@@ -6,6 +6,9 @@
 		<title>{{title}}</title>
 	</head>
 	<body>
+		<form class="col-12 d-md-flex justify-content-md-end p-3" action="/session/logout" method="get" >
+			<button class="btn btn-danger" type="submit" value="logout" onclick="logout">Cerrar Sesión</button>
+		</form>
 		<div class='col-11 m-3 pt-3 pb-3 text-center flex'>
 			<div class='card style-card item-center'>
 				{{#each docs}}
