@@ -1,5 +1,7 @@
 import { Router } from "express";
 import UsersModel from "../models/users.model.js";
+import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
 
 const router = Router()
 
@@ -9,33 +11,35 @@ router.get('/register', (req, res) => {
 })
 
 /* Metodo post para crear usuarios en la BD */
-router.post('/register', async(req, res) => {
-    const userNew = req.body
-    console.log(userNew);
-
-    const user = new UsersModel(userNew)
-    await user.save()
-
+router.post('/register', passport.authenticate('register', {failureRedirect:'/failRegister'}), async(req, res) => {
     res.redirect('login')
 })
 
+router.get('/fileRegister', (req,res) => {
+    res.send({error: 'failRegister'})
+})
 /* Ruta con metodo get que permite obtener la vista de login */
 router.get('/login', (req, res) => {
     res.render('login')
 })
 
 /* Ruta con metodo post que permite realizar un login */
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body
-
-    const user = await UsersModel.findOne({email, password}).lean().exec()
-    if(!user) {
-        return res.status(401).render('errorE', {
-            error: 'Email o password incorrectos'
-        })
+router.post('/login', passport.authenticate('login', {failureRedirect: 'failLogin'}), async (req, res) => {
+    if (!req.user) {
+        return res.status(400).send({ status: 'error', error: 'Invalid credentiales' })
     }
-    req.session.user = user
+
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        age: req.user.age
+    }
     res.redirect('/products')
+})
+
+router.get('/failLogin', (req, res) => {
+    res.send({ error: 'Fail Login' })
 })
 
 /* Ruta con metodo get que permite cerrar una sesión */

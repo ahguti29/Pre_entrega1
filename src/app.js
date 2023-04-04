@@ -9,6 +9,8 @@ import __dirname from './utils.js'
 import mongoose from 'mongoose';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
 import productsModel from './models/products.model.js';
 
 const app = express();
@@ -36,6 +38,9 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }))
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 app.use('/products', productsRouter);
 app.use('/carts', cartsRouter);
 app.use('/session', sessionRouter);
