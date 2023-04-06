@@ -2,6 +2,7 @@ import passport from "passport";
 import local from "passport-local"
 import UsersModel from "../models/users.model.js";
 import { createHash, isValidPassword } from "../utils.js"
+import GitHubStrategy from 'passport-github2'
 
 const LocalStrategy = local.Strategy
 const initializePassport = () => {
@@ -47,6 +48,29 @@ const initializePassport = () => {
             return done(null, user)
         } catch(err) {
 
+        }
+    }))
+
+    passport.use('github', new GitHubStrategy({
+        clientID: "Iv1.30e2b5f00374fde5",
+        clientSecret: "d011b3d14b1864cf999e13e3039ca366344e7ee9",
+        callbackURL: "http://localhost:8080/session/githubcallback"
+    }, async(accessToken, refreshToken, profile, done) => {
+        console.log(profile)
+        
+        try {
+            const user = await UsersModel.findOne({ email: profile._json.email})
+            if (user) {
+                return done(null, user)
+            }
+            const newUser = await UsersModel.create({
+                first_name: profile._json.name,
+                last_name: "",
+                email: profile._json.email
+            })
+            return done(null, newUser)
+        } catch(error) {
+            return done('Error to login with github')
         }
     }))
 
