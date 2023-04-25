@@ -1,5 +1,5 @@
 import productsModel from '../models/products.model.js';
-import ProductManager from '../controller/productManager.js';
+import ProductManager from '../services/productManager.js';
 const products = new ProductManager()
 
 export const getProducts = async(req, res) => {
