@@ -2,12 +2,15 @@ import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2'
 
 const productSchema = new mongoose.Schema({
-	id: Number,
+	id: String,
 	title: String,
 	description: String,
 	code: Number,
 	price: Number,
-	thumbnail: String,
+	thumbnail: {
+		type: Array,
+		default: []
+	},
 	category: {
 		type: String,
 		modelC: ['Gorras', 'Polos', 'Busos']

@@ -1,17 +1,17 @@
 /* const express = require('express'); */
-import  express  from 'express';
+import express from 'express';
 import path from 'path';
 import handlebars from 'express-handlebars';
-import productsRouter from './router/products.router.js'
-import cartsRouter from './router/carts.router.js'
-import sessionRouter from './router/session.router.js'
-import __dirname from './utils.js'
+import productsRouter from './router/products.router.js';
+import cartsRouter from './router/carts.router.js';
+import sessionRouter from './router/session.router.js';
+import __dirname from './utils.js';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
-import productsModel from './models/products.model.js';
+import productsModel from './dao/models/products.model.js';
 
 const app = express();
 const uri =
@@ -26,21 +26,23 @@ app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
 	res.render('home', {
-		title: 'E-COMMERCE'
+		title: 'E-COMMERCE',
 	});
 });
-app.use(session({
-	store: MongoStore.create({
-		mongoUrl: uri,
-		dbName: "ecommerce"
-	}),
-	secret: '3com3rce',
-	resave: true,
-	saveUninitialized: true
-}))
-initializePassport()
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(
+	session({
+		store: MongoStore.create({
+			mongoUrl: uri,
+			dbName: 'ecommerce',
+		}),
+		secret: '3com3rce',
+		resave: true,
+		saveUninitialized: true,
+	})
+);
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/products', productsRouter);
 app.use('/carts', cartsRouter);
 app.use('/session', sessionRouter);
@@ -51,4 +53,3 @@ const main = async () => {
 };
 
 main();
-

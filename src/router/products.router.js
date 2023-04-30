@@ -1,6 +1,6 @@
 /* const {Router} = require ('express'); */
 import { Router } from 'express';
-import { createProductController, deleteProductController, getProducts, getProductsByCategory, getProductsController, updateProductController } from '../controller/product.controller.js';
+import { createProductController, deleteProductController, getProducts, getProductsByCategory, getProductById, getProductsController, updateProductController } from '../controller/product.controller.js';
 
 const router = Router();
 const auth = (req, res, next) => {
@@ -11,6 +11,7 @@ const auth = (req, res, next) => {
 router.get('/view', getProducts); 
 router.get('/', auth, getProductsController);
 router.get('/:category', getProductsByCategory);
+router.get('/:id', getProductById);
 router.post("/", createProductController);
 router.put('/:id', updateProductController);
 router.delete('/:id', deleteProductController); 
