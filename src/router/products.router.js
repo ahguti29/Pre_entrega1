@@ -10,7 +10,7 @@ const auth = (req, res, next) => {
 
 router.get('/view', getProducts); 
 router.get('/', auth, getProductsController);
-router.get('/:category', getProductsByCategory);
+router.get('/product/:category', getProductsByCategory);
 router.get('/:id', getProductById);
 router.post("/", createProductController);
 router.put('/:id', updateProductController);

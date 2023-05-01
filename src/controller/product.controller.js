@@ -38,7 +38,7 @@ export const getProductsController = async (req, res) => {
 export const getProductById = async (req,res) => {
 	try{
 		const id = req.params.id;
-		const myProduct = await productsModel.find({id:id}).lean().exec();
+		const myProduct = await productsModel.findById(id);
 		console.log(myProduct);
 		res.render('realTimeProducts', {docs: myProduct})	
 	} catch (error){

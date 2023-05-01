@@ -11,11 +11,11 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
-import productsModel from './dao/models/products.model.js';
+import  config from './config/config.js';
+
 
 const app = express();
-const uri =
-	'mongodb+srv://ecommerce:entrega2@cluster0.1mmujrd.mongodb.net/ecommerce?retryWrites=true&w=majority';
+const uri =config.mongoUrl;
 
 app.use(express.json());
 app.use(express.urlencoded({ extends: true }));
