@@ -24,7 +24,7 @@ cartSchema.pre('findOne', function () {
     this.populate('products.product')
 }) 
 
-moongose.set("strictQuery", false)
+mongoose.set("strictQuery", false)
 const cartsModel = mongoose.model('carts', cartSchema)
 
 export default cartsModel;

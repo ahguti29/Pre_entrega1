@@ -16,7 +16,8 @@ import  config from './config/config.js';
 
 const app = express();
 const uri =config.mongoUrl;
-
+const dbName = config.dbName;
+const secret = config.secret;
 app.use(express.json());
 app.use(express.urlencoded({ extends: true }));
 app.engine('handlebars', handlebars.engine());
@@ -33,9 +34,9 @@ app.use(
 	session({
 		store: MongoStore.create({
 			mongoUrl: uri,
-			dbName: 'ecommerce',
+			dbName: dbName,
 		}),
-		secret: '3com3rce',
+		secret: secret,
 		resave: true,
 		saveUninitialized: true,
 	})
@@ -47,7 +48,7 @@ app.use('/products', productsRouter);
 app.use('/carts', cartsRouter);
 app.use('/session', sessionRouter);
 
-app.listen(8080, () => console.log('Server Up!'));
+app.listen(config.port, () => console.log('Server Up!'));
 const main = async () => {
 	await mongoose.connect(uri);
 };
