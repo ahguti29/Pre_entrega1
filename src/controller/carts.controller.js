@@ -2,6 +2,7 @@ import CartsManager from '../services/cartsManager.js';
 import path from 'path';
 import cartsModel from '../dao/models/carts.model.js';
 import productsModel from '../dao/models/products.model.js';
+import { log } from 'console';
 const cart = path.join('../data/carts.json');
 const carts = new CartsManager(cart);
 
@@ -175,194 +176,181 @@ export const deleteOneProduct = async(req, res) => {
   } catch (error) {
       console.log(error)
       result.status = "error"
-      result.message = "could not be consulted cart."
+      result.message = "No se puede consultar el cart."
       result.remov = false
       return res.json(result)
   }
 };
 
 /* Funcion que permite eliminar todos los productos del cart */
-export const deleteAllProducts = async(req, res) => {
-  const cid = req.params.cid
-  const result = {}
-  let del;
+export const deleteAllProducts = async (req, res) => {
+  const cid = req.params.cid;
+  const result = {};
 
-    if(cid === undefined){
-        result.status = "error"
-        result.message = "the cart id is not a correct number."
-        result.modif = -1
-        return res.json(result)
+  if (cid === undefined) {
+    result.status = "error";
+    result.message = "El id del carro no es correcto.";
+    result.modif = -1;
+    return res.json(result);
+  }
+
+  try {
+    const cartExists = await cartsModel.exists({ _id: cid });
+    if (!cartExists) {
+      result.status = "error";
+      result.message = "El carro no existe.";
+      result.modif = -1;
+      return res.json(result);
     }
+  } catch (error) {
+    result.status = "error";
+    result.message = "No se pudo consultar el carro.";
+    result.modif = -1;
+    return res.json(result);
+  }
 
-    try {
-        if(await cartsModel.exists({_id:cid}) === null){
-          
-            result.status = "error"
-            result.message = "the cart id no exists."
-            result.modif = -1
-            return res.json(result)
-        }
-    } catch (error) {
-      console.log(error)
-        result.status = "error"
-        result.message = "could not be consulted cart."
-        result.modif = -1
-        return res.json(result)
+  try {
+    let del = await cartsModel.updateOne({ _id: cid }, { products: [] });
+    console.log(del.modifiedCount)
+    if (del.modifiedCount > 0) {
+      result.status = "success";
+      result.message = `Se eliminaron todos los productos del carro ${cid} exitosamente.`;
+      result.modif = 1;
+    } else if (del.modifiedCount === 0 && del.matchedCount > 0) {
+      result.status = "success";
+      result.message = `El carro ${cid} no contenía productos para eliminar.`;
+      result.modif = 0;
+    } else {
+      result.status = "error";
+      result.message = `El carro ${cid} no fue encontrado.`;
+      result.modif = -1;
     }
-
-    try {
-        del = await cartsModel.updateOne({_id:cid},{ products: [] })
-
-        if(del.modifiedCount > 0 && del.matchedCount > 0){
-            result.status = "success"
-            result.message = `products cart whit ${cid} updated successfully`
-            result.modif = 1
-            return res.json(result)
-        }
-
-        if(del.modifiedCount === 0 && del.matchedCount > 0){
-            result.status = "success"
-            result.message = `products cart whit ${cid} found but not updated`
-            result.modif = 0
-            return res.json(result)
-        }
-
-        if(del.matchedCount === 0){
-            result.status = "error"
-            result.message = `cart whit ${cid} not found`
-            result.modif = -1
-            return res.json(result)
-        }
-    } catch (error) {
-        console.log(error)
-        result.status = "error"
-        result.message = "could not be consulted cart."
-        result.modif = -1
-        return res.json(result)
-    }
+    return res.json(result);
+  } catch (error) {
+    result.status = "error";
+    result.message = "No se pudo actualizar el carro.";
+    result.modif = -1;
+    return res.json(result);
+  }
 };
 
 /* Funcion que permite actualizar un arreglo de productos */
-export const updateProducts = async(req, res) => {
-  
-    const cid = req.params.cid
-    const arrayProducts = req.body
-    const result = {}
-    let upd;
+export const updateProducts = async (req, res) => {
+  const cid = req.params.id;
+  const arrayProducts = req.body;
+  const result = {};
 
-    if(cid === undefined){
-        result.status = "error"
-        result.message = "the cart id is not a correct number."
-        result.modif = -1
-        return res.json(result)
+  if (cid === undefined) {
+    console.log(cid)
+    result.status = "error";
+    result.message = "El id del carro no es un número válido.";
+    result.modif = -1;
+    return res.json(result);
+  }
+  console.log(arrayProducts)
+  console.log(cid)
+
+  if (arrayProducts === undefined || !(Array.isArray(arrayProducts))) {
+    result.status = "error";
+    result.message = "El arreglo de productos no es válido.";
+    result.modif = -1;
+    return res.json(result);
+  }
+
+  const auxProducts = arrayProducts.map((prod) => ({
+    product: { _id: prod.id },
+    quantity: prod.quantity,
+  }));
+
+  try {
+    let upd = await cartsModel.updateOne({ _id: cid }, { products: auxProducts });
+
+    if (upd.modifiedCount > 0 && upd.matchedCount>0) {
+      result.status = "success";
+      result.message = `Los productos del carro ${cid} se actualizaron exitosamente.`;
+      result.modif = 1;
+    } else if (upd.modifiedCount === 0) {
+      result.status = "success";
+      result.message = `El carro ${cid} se encontró, pero no se realizaron actualizaciones.`;
+      result.modif = 0;
+    } else {
+      result.status = "error";
+      result.message = `No se encontró el carro ${cid}.`;
+      result.modif = -1;
     }
 
-    if(arrayProducts === undefined || !(Array.isArray(arrayProducts))){
-        result.status = "error"
-        result.message = " the array of products is not valid"
-        result.modif = -1
-        return res.json(result)
-    }
-
-    const auxProducts = arrayProducts.map( prod => {
-        return { product : {_id : prod.id}, quantity : prod.quantity }
-    })
-    try {
-        upd = await cartsModel.updateOne({_id:cid},{ products: auxProducts })
-        console.log(upd)
-        if(upd.modifiedCount > 0 && upd.matchedCount > 0){
-            result.status = "success"
-            result.message = `products cart whit ${cid} updated successfully`
-            result.modif = 1
-            return res.json(result)
-        }
-
-        if(upd.modifiedCount === 0 && upd.matchedCount > 0){
-            result.status = "success"
-            result.message = `products cart whit ${cid} found but not updated`
-            result.modif = 0
-            return res.json(result)
-        }
-
-        if(upd.matchedCount === 0){
-            result.status = "error"
-            result.message = `cart whit ${cid} not found`
-            result.modif = -1
-            return res.json(result)
-        } 
-
-    } catch (error) {
-        result.status = "error"
-        result.message = `products cart whit ${cid} not updated`
-        result.modif = -1
-        return res.json(result)
-    }
+    return res.json(result);
+  } catch (error) {
+    console.log(error);
+    result.status = "error";
+    result.message = `No se pudo actualizar el carro ${cid}.`;
+    result.modif = -1;
+    return res.json(result);
+  }
 };
+
 /* Función que permite actualizar la cantidad de un producto */
 export const updateQuantity = async(req, res) => {
-  const {cid,id} = req.params
+  const {cartId,productId} = req.params
     let {quantity} = req.body
     const result = {}
 
     quantity = parseInt(quantity)
 
-    if(cid === undefined || id === undefined){
+    if(cartId === undefined || producId === undefined){
         result.status = "error"
-        result.message = "the cart id or product id is not a correct number."
+        result.message = "the id del carro no es correcto"
         result.modif = -1
         return res.json(result)
     }
 
     if(isNaN(quantity)){
         result.status = "error"
-        result.message = "the quantity is not a correct number."
+        result.message = "La cantidad no es un numero correcto."
         result.modif = -1
         return res.json(result)
     }
 
     try {
-        if(await cartsModel.exists({_id:cid}) === null){
+        if(await cartsModel.exists({_id:cartId}) === null){
             result.status = "error"
-            result.message = "the cart id no exists."
+            result.message = "tEl cartId no existe."
             result.modif = -1
             return res.json(result)
         }
     } catch (error) {
         result.status = "error"
-        result.message = "could not be consulted cart."
+        result.message = "No puede consultar el cart."
         result.modif = -1
         return res.json(result)
     }
 
-    let upd
-
     try {
-        upd = await cartsModel.updateOne({_id:cid , 'products.product':id},{$set:{'products.$.quantity':quantity}})
+        const upd = await cartsModel.updateOne({_id:cardId , 'products.product':productId},{$set:{'products.$.quantity':quantity}})
         if(upd.modifiedCount > 0 && upd.matchedCount > 0){
             result.status = "success"
-            result.message = "quantity of product updated."
+            result.message = "cantidad Actualizada."
             result.modif = 1
             return res.json(result)
         }
 
         if(upd.modifiedCount === 0 && upd.matchedCount > 0){
             result.status = "success"
-            result.message = "quantity of product not updated."
+            result.message = "cantidad de productos no actualizada."
             result.modif = 0
             return res.json(result)
         }
 
         if(upd.matchedCount === 0){
             result.status = "error"
-            result.message = "product not found in the cart."
+            result.message = "product no encontrado en el cart."
             result.modif = -1
             return res.json(result)
         }
         
-        
     } catch (error) {
         result.status = "error"
-        result.message = "product not updated"
+        result.message = "producto no actualizado"
         result.modif = -1
         return res.json(result)
     }
