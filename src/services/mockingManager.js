@@ -4,11 +4,13 @@ faker.locale = 'es';
 
 export const generateProducts = () => {
     return{
+        id: faker.database.mongodbObjectId(),
         title: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         price: faker.commerce.price(),
         stock: faker.random.numeric(1),
-        id: faker.database.mongodbObjectId()
+        thumbnails: faker.image.image()
+        
     }
 }
 

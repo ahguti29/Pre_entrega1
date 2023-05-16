@@ -5,5 +5,5 @@ export const getProducts = (req, res) => {
     for(let i=0; i<100; i++){
         products.push(generateProducts())
     }
-    res.send({status:"success", payload: products})
+    res.render('products',{docs: products})
 }

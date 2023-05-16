@@ -1,0 +1,28 @@
+<div class='col-11 m-3 pt-3 pb-3 text-center flex'>
+	<div class='card style-card item-center'>
+		{{#each docs}}
+			<div class='card-body'>
+				<div class='card h-100'>
+					{{#if this.thumbnails}}
+					{{!-- <img src="{{this.thumbnail.[0]}}" class='card-img-top card-pers'alt=''/> --}}
+					{{else}}
+					<img src="../public/images/notImage.jpg" class='card-img-top' alt="">
+					{{/if}}
+					
+					<ul class='list-group'>
+						<li class='list-group-item'><h3><img src="{{this.thumbnails}}" alt="" class=" width="150" height="100"></h3></li>
+						<li class='list-group-item'><h3>{{this.title}}</h3></li>
+						<li class='list-group-item'><span
+							>Description:</span> {{this.description}}</li>
+						<li class='list-group-item'><span
+							>Id:</span> {{this.id}}</li>
+						<li class='list-group-item'><span
+							>Price:</span> {{this.price}}</li>
+						<li class='list-group-item'><span
+							>Stock:</span> {{this.stock}}</li>
+					</ul>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</div>
