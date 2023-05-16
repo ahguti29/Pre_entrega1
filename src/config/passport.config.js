@@ -100,4 +100,19 @@ const initializePassport = () => {
 	});
 };
 
+export const authorizeProductAccess = (req, res, next) => {
+	// Verificar si el usuario actual es un administrador
+	if (req.body.role === 'admin') {
+	  // Verificar si la solicitud es para crear, actualizar o eliminar un producto
+	  if (['POST', 'PUT', 'DELETE'].includes(req.method) && req.originalUrl.includes('/products')) {
+		// Permitir acceso si el usuario actual es un administrador
+		return next();
+	  }
+	}
+	// Responder con un error de autorización si no se cumple la condición
+	return res.status(401).send('No está autorizado para acceder a este recurso');
+  }
+  
+  
+
 export default initializePassport;
