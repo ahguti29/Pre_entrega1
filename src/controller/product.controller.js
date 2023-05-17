@@ -1,4 +1,7 @@
 import productsModel from '../dao/models/products.model.js';
+import CustomError from '../services/errors/custom_error.js';
+import EErros from '../services/errors/enums.js';
+import { generateErrorInfo } from '../services/errors/info.js';
 import ProductManager from '../services/productManager.js';
 const products = new ProductManager();
 
@@ -73,9 +76,15 @@ export const createProductController = async (req, res) => {
 			!product.category ||
 			!product.status
 		) {
-			return res.status(400).json({
+			/* return res.status(400).json({
 				message: 'Error, debe diligenciar todos los datos',
-			});
+			}); */
+			CustomError.createError({
+				name: "Product creation error",
+				cause: generateErrorInfo(product),
+				message: "Error trying to create a product",
+				code: EErros.INVALID_TYPES_ERROR
+			})
 		}
 
 		const newProduct = await productsModel.create(product);
