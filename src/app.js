@@ -14,6 +14,8 @@ import initializePassport from './config/passport.config.js';
 import  config from './config/config.js';
 import mockingRouter from './router/mocking.router.js';
 import errorHandler from './middlewares/error.js'
+import logger from './logger.js';
+import loggerRouter from './router/logger.router.js'
 
 
 const app = express();
@@ -49,12 +51,15 @@ app.use(passport.session());
 app.use('/products', productsRouter);
 app.use('/carts', cartsRouter);
 app.use('/session', sessionRouter);
-app.use('/mockingproducts', mockingRouter)
-app.use(errorHandler);
+app.use('/mockingproducts', mockingRouter);
+app.use('/loggerTest', loggerRouter);
+app.use(errorHandler); 
 
-app.listen(config.port, () => console.log('Server Up!'));
+app.listen(config.port, () => logger.info('Server Up!'));
 const main = async () => {
 	await mongoose.connect(uri);
 };
 
 main();
+
+
