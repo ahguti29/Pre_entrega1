@@ -3,6 +3,7 @@ const path = require('path'); */
 import fs from 'fs';
 import path from 'path';
 import __dirname from '../utils.js'
+import logger from '../logger.js'
 class ProductManager {
 	
 	constructor() {
@@ -51,17 +52,17 @@ class ProductManager {
 		
 		//Validación del ingreso de parametros
         if(!title || !description || !price || !code  || !stock || !category || !status){
-            console.error ("El producto no fue agregado, completar todos los datos")
+            logger.error ("El producto no fue agregado, completar todos los datos")
             return
         }
 		//validación del ID
 	 	let productId = products.find((element) => element.id === id)
 		if(productId){	
-			return console.error(`El producto con id ${id} ya existe`)
+			return logger.error(`El producto con id ${id} ya existe`)
 		} 
 		//Validación del code ingresado
 		if (products.find((element) => element.code === code)) {
-			console.error(`El producto con code ${code} ya existe`);
+			logger.error(`El producto con code ${code} ya existe`);
             return;
 		}
 		//Se agrega  el producto al array

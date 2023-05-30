@@ -2,6 +2,7 @@ import { Router } from 'express';
 import UsersModel from '../dao/models/users.model.js';
 import { createHash, isValidPassword } from '../utils.js';
 import passport from 'passport';
+import logger from '../logger.js';
 
 const router = Router();
 
@@ -62,9 +63,9 @@ router.get(
 	'/githubcallback',
 	passport.authenticate('github', { failureRedirect: '/login' }),
 	async (req, res) => {
-		console.log('callback: ', req.user);
+		logger.info('callback: ', req.user);
 		req.session.user = req.user;
-		console.log('User session: ', req.session.user);
+		logger.info('User session: ', req.session.user);
 		res.redirect('/products');
 	}
 );
@@ -73,7 +74,7 @@ router.get(
 router.get('/logout', (req, res) => {
 	req.session.destroy((err) => {
 		if (err) {
-			console.log(err);
+			logger.error(err);
 			res.status(500).render('error', { error: err });
 		} else res.redirect('login');
 	});

@@ -2,7 +2,7 @@ import CartsManager from '../services/cartsManager.js';
 import path from 'path';
 import cartsModel from '../dao/models/carts.model.js';
 import productsModel from '../dao/models/products.model.js';
-import { log } from 'console';
+import logger from '../logger.js'
 const cart = path.join('../data/carts.json');
 const carts = new CartsManager(cart);
 
@@ -33,7 +33,7 @@ export const createCartController = async (req, res) => {
 
 export const getCart = async (req, res) => {
 	const id = req.params.id;
-	console.log(id);
+	logger.info(id);
 	const result = {};
 
 	if (id === undefined) {
@@ -151,7 +151,7 @@ export const deleteOneProduct = async(req, res) => {
           return res.json(result)
       }
   } catch (error) {
-      console.log(error)
+      logger.error(error)
       result.status = "error"
       result.message = "No puede consultar el cart."
       result.remov = false
@@ -241,7 +241,7 @@ export const updateProducts = async (req, res) => {
   const result = {};
 
   if (cid === undefined) {
-    console.log(cid)
+    logger.info(cid)
     result.status = "error";
     result.message = "El id del carro no es un número válido.";
     result.modif = -1;
@@ -281,7 +281,7 @@ export const updateProducts = async (req, res) => {
 
     return res.json(result);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     result.status = "error";
     result.message = `No se pudo actualizar el carro ${cid}.`;
     result.modif = -1;

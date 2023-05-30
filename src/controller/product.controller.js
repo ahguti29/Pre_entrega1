@@ -1,4 +1,5 @@
 import productsModel from '../dao/models/products.model.js';
+import logger from '../logger.js';
 import CustomError from '../services/errors/custom_error.js';
 import EErros from '../services/errors/enums.js';
 import { generateErrorInfo } from '../services/errors/info.js';
@@ -34,7 +35,7 @@ export const getProductsController = async (req, res) => {
 	result.nextLink = result.hasNextPage
 		? `/products?limit=${result.limit}&page=${result.nextPage}`
 		: '';
-	console.log(result);
+	logger.info(result);
 	res.render('home', result);
 };
 
@@ -42,7 +43,7 @@ export const getProductById = async (req,res) => {
 	try{
 		const id = req.params.id;
 		const myProduct = await productsModel.findById(id);
-		console.log(myProduct);
+		logger.info(myProduct);
 		res.render('realTimeProducts', {docs: myProduct})	
 	} catch (error){
 		res.status(404).send({ error });
@@ -57,7 +58,7 @@ export const getProductsByCategory = async (req, res) => {
 			.find({ category: category })
 			.lean()
 			.exec();
-		console.log(product);
+		logger.info(product);
 		res.render('realTimeProducts', { docs: product });
 	} catch (error) {
 		res.status(404).send({ error });
@@ -94,7 +95,7 @@ export const createProductController = async (req, res) => {
 			newProduct,
 		});
 	} catch (error) {
-		console.log(error);
+		logger.error(error);
 		res.json({ error });
 	}
 };
@@ -115,7 +116,7 @@ export const updateProductController = async (req, res) => {
 			myProduct,
 		});
 	} catch (error) {
-		console.log(error);
+		logger.error(error);
 		res.json({ error });
 	}
 };

@@ -3,7 +3,7 @@ import local from 'passport-local';
 import UsersModel from '../dao/models/users.model.js';
 import { createHash, isValidPassword } from '../utils.js';
 import GitHubStrategy from 'passport-github2';
-import { log } from 'console';
+import logger from '../logger.js';
 
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {
@@ -16,11 +16,11 @@ const initializePassport = () => {
 			},
 			async (req, username, password, done) => {
 				const { first_name, last_name, email, age, role } = req.body;
-				console.log(role);
+				logger.info(role);
 				try {
 					const user = await UsersModel.findOne({ email: username });
 					if (user) {
-						console.log('User already exists');
+						logger.warning('User already exists');
 						return done(null, false);
 					}
 
@@ -73,7 +73,7 @@ const initializePassport = () => {
 			async (accessToken, refreshToken, profile, done) => {
 				try {
 					const user = await UsersModel.findOne({ email: profile._json.email });
-					console.log(profile);
+					logger.info(profile);
 					if (user) {
 						return done(null, user);
 					}
