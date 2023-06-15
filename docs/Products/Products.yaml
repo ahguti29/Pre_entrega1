@@ -1,13 +1,13 @@
 paths:
   /api/products:
-    get: 
+    get:
       summary: Obtiene todos los productos existentes
       tags:
         - Products
       responses:
-        "200":
+        '200':
           description: Los productos fueron obtenidos completamente de la BD
-        "500":
+        '500':
           description: Error interno del servidor
 components:
   schemas:
@@ -17,9 +17,37 @@ components:
         _id:
           type: ObjectId
           description: Id autogenerado de mongo
-        name: 
+        title:
           type: string
           description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion o caracteristicas del producto
+        code:
+          type: Number
+          description: Codigo que se le asigna a cada producto
+        price:
+          type: Number
+          description: Precio del producto
+        thumbnail:
+          type: Array
+          description: Listado de imagenes del producto
+        category:
+          type: string
+          description: Categoria del producto (Gorras, Polos, Busos...)
+        status:
+          type: Boolean
+          description: Estado del producto
+        stock:
+          type: Number
+          description: Cantidad de existencias del producto
       example:
         _id: ObjectId("abc")
-        name: Gorra
+        title: Buso Negro
+        description: Buso talla M Color Negro para hombre
+        code: 001
+        price: 150
+        thumbnail: img.jpg
+        category: busos
+        status: true
+        stock: 20
