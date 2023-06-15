@@ -1,0 +1,25 @@
+paths:
+  /api/products:
+    get: 
+      summary: Obtiene todos los productos existentes
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos completamente de la BD
+        "500":
+          description: Error interno del servidor
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de mongo
+        name: 
+          type: string
+          description: Nombre del producto
+      example:
+        _id: ObjectId("abc")
+        name: Gorra

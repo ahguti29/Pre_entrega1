@@ -16,7 +16,8 @@ import mockingRouter from './router/mocking.router.js';
 import errorHandler from './middlewares/error.js'
 import logger from './logger.js';
 import loggerRouter from './router/logger.router.js'
-
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express'
 
 const app = express();
 const uri =config.mongoUrl;
@@ -59,6 +60,20 @@ app.listen(config.port, () => logger.info('Server Up!'));
 const main = async () => {
 	await mongoose.connect(uri);
 };
+
+const swaggerOptions = {
+	definition:{
+		openapi: '3.0.1',
+		info: {
+			title: 'Documentacion Ecommerce',
+			description: 'API ecommerce'
+		}
+	},
+	apis: ['./docs/**/*.yaml']
+}
+
+const specs = swaggerJSDoc(swaggerOptions);
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 main();
 
